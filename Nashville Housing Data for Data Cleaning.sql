@@ -6,13 +6,13 @@ Cleaning data in SQL Queries
 
 SELECT 
 	*
-FROM ResearcherDatabase..[NashvilleHousing]
+FROM PortfolioProject..[NashvilleHousing]
 ------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Standardize Data Format
 
 SELECT SaleDateConverted, CONVERT(DATE,SaleDate)
-FROM ResearcherDatabase..NashvilleHousing
+FROM PortfolioProject..NashvilleHousing
 
 UPDATE NashvilleHousing
 SET SaleDate = CONVERT(Date,SaleDate)
@@ -30,14 +30,14 @@ SET SaleDateConverted = CONVERT(Date,SaleDate)
 -- Populate Property Address data
 
 SELECT *
-FROM ResearcherDatabase..NashvilleHousing
+FROM PortfolioProject..NashvilleHousing
 --where PropertyAddress is null
 order by ParcelID
 
 
 SELECT a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress, b.PropertyAddress)
-FROM ResearcherDatabase..NashvilleHousing a
-join  ResearcherDatabase..NashvilleHousing b
+FROM PortfolioProject..NashvilleHousing a
+join  PortfolioProject..NashvilleHousing b
 on a.ParcelID = b.ParcelID
 and a.UniqueID <> b.UniqueID
 where a.PropertyAddress is NULL
@@ -45,8 +45,8 @@ where a.PropertyAddress is NULL
 
 UPDATE a
 SET propertyAddress = ISNULL(a.PropertyAddress, b.PropertyAddress)
-FROM ResearcherDatabase..NashvilleHousing a
-join  ResearcherDatabase..NashvilleHousing b
+FROM PortfolioProject..NashvilleHousing a
+join  PortfolioProject..NashvilleHousing b
 on a.ParcelID = b.ParcelID
 and a.UniqueID <> b.UniqueID
 where a.PropertyAddress is NULL
@@ -57,28 +57,28 @@ where a.PropertyAddress is NULL
 -- Breaking out Address into Individual Columns (Address, City, State)
 
 SELECT PropertyAddress
-FROM ResearcherDatabase..NashvilleHousing
+FROM PortfolioProject..NashvilleHousing
 --where PropertyAddress is null
 --order by ParcelID
 
 Select 
-	SUBSTRING(PropertyAddress, 1, CHARINDEX(',',PropertyAddress) -1) as Address,
+	SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1) as Address,
 	SUBSTRING(PropertyAddress, CHARINDEX(',',PropertyAddress) +1, LEN(PropertyAddress)) as Address 
-from ResearcherDatabase..NashvilleHousing
+from PortfolioProject..NashvilleHousing
 
 
-ALTER TABLE ResearcherDatabase..NashvilleHousing
+ALTER TABLE PortfolioProject..NashvilleHousing
 Add PropertySplitAddress Nvarchar(255);
 
-Update ResearcherDatabase..NashvilleHousing
+Update PortfolioProject..NashvilleHousing
 SET PropertySplitAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',',PropertyAddress) -1)
 
 
 
-ALTER TABLE ResearcherDatabase..NashvilleHousing
+ALTER TABLE PortfolioProject..NashvilleHousing
 Add PropertySplitCity Nvarchar(255);
 
-Update ResearcherDatabase..NashvilleHousing
+Update PortfolioProject..NashvilleHousing
 SET PropertySplitCity = SUBSTRING(PropertyAddress, CHARINDEX(',',PropertyAddress) +1, LEN(PropertyAddress))
 
 
@@ -89,41 +89,41 @@ From PortfolioProject.dbo.NashvilleHousing
 
 
 select OwnerAddress
-from ResearcherDatabase..NashvilleHousing
+from PortfolioProject..NashvilleHousing
 
 
 select 
 PARSENAME(replace(OwnerAddress,',','.'),3)
-,PARSENAME(replace(OwnerAddress,',','.'),2)
-,PARSENAME(replace(OwnerAddress,',','.'),1)
-from ResearcherDatabase..NashvilleHousing
+, PARSENAME(replace(OwnerAddress,',','.'),2)
+, PARSENAME(replace(OwnerAddress,',','.'),1)
+from PortfolioProject..NashvilleHousing
 
-ALTER TABLE ResearcherDatabase..NashvilleHousing
+ALTER TABLE PortfolioProject..NashvilleHousing
 Add OwnerSplitAddress Nvarchar(255);
 
-Update ResearcherDatabase..NashvilleHousing
+Update PortfolioProject..NashvilleHousing
 SET OwnerSplitAddress = PARSENAME(replace(OwnerAddress,',','.'),3)
 
 
 
-ALTER TABLE ResearcherDatabase..NashvilleHousing
+ALTER TABLE PortfolioProject..NashvilleHousing
 Add OwnerSplitCity Nvarchar(255);
 
-Update ResearcherDatabase..NashvilleHousing
+Update PortfolioProject..NashvilleHousing
 SET OwnerSplitCity = PARSENAME(replace(OwnerAddress,',','.'),2)
 
 
 
-ALTER TABLE ResearcherDatabase..NashvilleHousing
+ALTER TABLE PortfolioProject..NashvilleHousing
 Add OwnerSplitState Nvarchar(255);
 
-Update ResearcherDatabase..NashvilleHousing
+Update PortfolioProject..NashvilleHousing
 SET OwnerSplitState = PARSENAME(replace(OwnerAddress,',','.'),1)
 
 
 
 
-select * from ResearcherDatabase..NashvilleHousing
+select * from PortfolioProject..NashvilleHousing
 
 
 
@@ -133,7 +133,7 @@ select * from ResearcherDatabase..NashvilleHousing
 
 
 select distinct SoldAsVacant, count(soldasvacant)
-from ResearcherDatabase..NashvilleHousing
+from PortfolioProject..NashvilleHousing
 group by SoldAsVacant
 order by 2
 
@@ -146,11 +146,11 @@ SELECT
 		WHEN SoldAsVacant ='N' then 'no'
 	ELSE SoldAsVacant
 	END
-FROM ResearcherDatabase..NashvilleHousing
+FROM PortfolioProject..NashvilleHousing
 
 
 
-UPDATE ResearcherDatabase..NashvilleHousing
+UPDATE PortfolioProject..NashvilleHousing
 SET SoldAsVacant = CASE 
 		WHEN SoldAsVacant = 'Y' then 'Yes'
 		WHEN SoldAsVacant ='N' then 'no'
@@ -174,7 +174,7 @@ SELECT *,
 				LegalReference 
 				ORDER BY 
 					UniqueID) as rownum
-FROM ResearcherDatabase..NashvilleHousing
+FROM PortfolioProject..NashvilleHousing
 --order by ParcelID
 )
 select * 
@@ -184,7 +184,7 @@ order by PropertyAddress
 
 
 Select *
-From ResearcherDatabase.dbo.NashvilleHousing
+From PortfolioProject.dbo.NashvilleHousing
 
 
 --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -192,12 +192,12 @@ From ResearcherDatabase.dbo.NashvilleHousing
 -- Delete Unused Columns
 
 select *
-FROM ResearcherDatabase..NashvilleHousing
+FROM PortfolioProject..NashvilleHousing
 
 
 
-ALTER ResearcherDatabase..NashvilleHousing
-DROP COLUMN  OwnerAddress,TaxDistrict, PropertyAddress, SaleDate
+ALTER PortfolioProject..NashvilleHousing
+DROP COLUMN  OwnerAddress, TaxDistrict, PropertyAddress, SaleDate
 
 
 
@@ -246,6 +246,6 @@ DROP COLUMN  OwnerAddress,TaxDistrict, PropertyAddress, SaleDate
 --GO
 --SELECT * INTO nashvilleHousing
 --FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0',
---    'Excel 12.0; Database=C:\Users\alexf\OneDrive\Documents\SQL Server Management Studio\Nashville Housing Data for Data Cleaning Project.csv', [Sheet1$]);
+--    'Excel 12.0; Database=C:\Users\jhanvi\OneDrive\Documents\SQL Server Management Studio\Nashville Housing Data for Data Cleaning Project.csv', [Sheet1$]);
 --GO
 
